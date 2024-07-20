@@ -2,17 +2,14 @@
 
 ![Баннер](https://i.ibb.co/nwnrB9H/icon.png)
 
-## 📖 Description
+# 📖 Description
 This bot can download:
 - Photos and videos from Instagram and Twitter.
 - Videos (with quality selection) and audio (in the best quality) from YouTube.
 - Music from SoundCloud.
 - Videos and clips from VKontakte.
 
-## ⚙️ Installation
-
-
-# Project Setup Guide
+# ⚙️ Project Setup Guide
 
 Welcome to the project setup guide! Follow these steps to configure and run the project, whether you're using Python or Docker.
 
@@ -51,6 +48,7 @@ API_HASH=your_telegram_app_api_hash
 
 ## Setup Instructions
 
+![Python](https://img.shields.io/badge/Python-%2314354C?logo=python&logoColor=white)
 ### Python Way
 
 1. **Download and Install Python 3.11.9**
@@ -79,6 +77,7 @@ API_HASH=your_telegram_app_api_hash
    pip install -r requirements.txt
    ```
 
+![Docker](https://img.shields.io/badge/Docker-%232496ED?logo=docker&logoColor=white)
 ### Docker Way
 
 1. **Install Docker**
