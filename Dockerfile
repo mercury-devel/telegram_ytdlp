@@ -14,4 +14,4 @@ RUN apt-get update && apt-get install -y ffmpeg
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Указываем команду для запуска бота
-CMD ["python", "bot.py"]
+CMD ["python", "main.py"]
