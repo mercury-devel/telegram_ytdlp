@@ -15,37 +15,37 @@ show_menu() {
 # Function to perform the build command
 build_image() {
     echo "Building image..."
-    docker build -t savefrom .
+    docker build -t telegram_utdlp .
 }
 
 # Function to create and start the container
 create_and_run_container() {
     echo "Creating and starting container..."
-    docker run -d --name savefrom --env-file .env savefrom
+    docker run -d --name telegram_utdlp --env-file .env telegram_utdlp
 }
 
 # Function to stop the container
 stop_container() {
     echo "Stopping container..."
-    docker stop savefrom
+    docker stop telegram_utdlp
 }
 
 # Function to restart the container
 restart_container() {
     echo "Restarting container..."
-    docker start savefrom
+    docker start telegram_utdlp
 }
 
 # Function to remove the container
 remove_container() {
     echo "Removing container..."
-    docker rm savefrom
+    docker rm telegram_utdlp
 }
 
 # Function to show container logs
 show_logs() {
     echo "Container logs..."
-    docker logs savefrom
+    docker logs telegram_utdlp
 }
 
 # Main program loop
