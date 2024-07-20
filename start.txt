@@ -1,0 +1,7 @@
+Good Day!
+This bot can download:
+
+    Photos and videos from Instagram and Twitter.
+    Videos (with quality selection) and audio (in the best quality) from YouTube.
+    Music from SoundCloud.
+    Videos and clips from VKontakte.
