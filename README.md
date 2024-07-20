@@ -77,6 +77,7 @@ ADMIN_LIST=[123, 456](where are 123 and 456 - telegram ids of admins)
 # 🚀 Usage
 
 Type /start then paste your link to video on youtube, instagram, tik tok etc
+
 If you are in admin list, type /admin. There is a message sender. It sends your message to all users in your bot!
 
 ## 💰 Support My Work
