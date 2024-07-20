@@ -105,3 +105,19 @@ API_HASH=your_telegram_app_api_hash
 - Ensure that your `.env` file is properly configured with the correct values.
 - Follow Docker's documentation for any additional configuration or troubleshooting.
 
+## 💰 Support My Work
+
+If you like what I do and want to support me, consider making a Bitcoin donation!
+
+**Bitcoin:**
+
+`bc1qhpegcfz6ynmksff95wj9e4kva89d95syyqk3l4`
+
+**USDT/TRC20:**
+
+`TRJxipxAswjj9A7RuvUFx1ShfmZ3JLhi2r`
+
+
+**TON:**
+
+`EQCwp7u30xT9gmWfcruTP45gLlG66fi1ySGthYcasAss05uR`
