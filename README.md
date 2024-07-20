@@ -40,45 +40,14 @@ Add the following information to your `.env` file:
 
 ```env
 BOT_TOKEN=your_telegram_bot_token
-CHANNEL_ID=your_channel_id
-CHANNEL_LINK=your_channel_link
+CHANNEL_ID=your_channel_id (ex. -100123123123) 
+CHANNEL_LINK=your_channel_link (ex. t.me/***)
 API_ID=your_telegram_app_api_id
 API_HASH=your_telegram_app_api_hash
+ADMIN_LIST=[123, 456](where are 123 and 456 - telegram ids of admins)
 ```
 
 ## Setup Instructions
-
-![Python](https://img.shields.io/badge/Python-%2314354C?logo=python&logoColor=white)
-### Python Way
-
-1. **Download and Install Python 3.11.9**
-
-2. **Create and Activate Virtual Environment**
-
-   ```bash
-   python -m venv venv
-   ```
-
-   - **Windows:**
-
-     ```bash
-     venv\Scripts\activate
-     ```
-
-   - **Linux:**
-
-     ```bash
-     source venv/bin/activate
-     ```
-
-3. **Install Dependencies**
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-![Docker](https://img.shields.io/badge/Docker-%232496ED?logo=docker&logoColor=white)
-### Docker Way
 
 1. **Install Docker**
 
@@ -104,6 +73,11 @@ API_HASH=your_telegram_app_api_hash
 
 - Ensure that your `.env` file is properly configured with the correct values.
 - Follow Docker's documentation for any additional configuration or troubleshooting.
+
+# 🚀 Usage
+
+Type /start then paste your link to video on youtube, instagram, tik tok etc
+If you are in admin list, type /admin. There is a message sender. It sends your message to all users in your bot!
 
 ## 💰 Support My Work
 
