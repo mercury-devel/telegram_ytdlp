@@ -30,11 +30,11 @@ async def youtube_download(call: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     _, work = db.get_user(call.from_user.id)
     if work == 1:
-        await call.message.answer("Подождите, когда закончится уже начатая загрузка")
+        await call.message.answer("Wait while your video is downloading")
         return
 
     if not data:
-        await call.answer("Отправьте ссылку снова")
+        await call.answer("Send me link again")
         return
     link = data['link']
     domain = data['domain']
@@ -44,10 +44,10 @@ async def youtube_download(call: CallbackQuery, state: FSMContext):
     _, format, size = call.data.split(":")
     max_size = 2 * 1024 * 1024 * 1024
     if int(size) >= max_size:
-        await call.message.answer("Файл слишком большой. Попробуйте другой")
+        await call.message.answer("File is too large. Try another")
         return 
     db.set_work(call.from_user.id, 1)
-    await call.message.answer("Загрузка началась")
+    await call.message.answer("Downloading has been started")
     if format != "audio":
         my_thread = threading.Thread(target=simple_downloader, args=(link, video_path, call.from_user.id, domain, format, data['title'], thumbnail_path))
         my_thread.start()
@@ -65,16 +65,16 @@ async def all(message: Message, state: FSMContext):
                 return
         _, work = db.get_user(message.from_user.id)
         if work == 1:
-            await message.answer("Подождите, когда закончится уже начатая загрузка")
+            await message.answer("Wait while your video is downloading")
             return
         random_name = random.randint(10000, 99999)
         video_path = f"downloads/{random_name}.mp4"
         info_dict = get_video_formats(link, domain)
         live = info_dict.get('is_live', False)
         if live:
-            await message.answer("Прямые эфиры скачивать нельзя!")
+            await message.answer("Live streams is restricted!")
             return
-        title_orig = info_dict.get('title', 'Без названия')
+        title_orig = info_dict.get('title', 'No name')
         if domain == "soundcloud.com":
             title = sanitize_filename(title_orig)
             audio_path = f"downloads/{title}.mp3"
@@ -83,14 +83,15 @@ async def all(message: Message, state: FSMContext):
             return
         if domain.find("youtu") == -1:
             db.set_work(message.from_user.id, 1)
-            await message.answer("Загрузка началась")
+            await message.answer("Downloading has been started")
             my_thread = threading.Thread(target=simple_downloader, args=(link, video_path, message.from_user.id, domain, None, title_orig,))
             my_thread.start()
         else:
             formats = info_dict.get('formats', [])
             if info_dict['live_status'] == 'is_live':
-                await message.answer("Прямые эфиры скачивать нельзя!")
+                await message.answer("Live streams is restricted!")
                 return
+            # Formats logs
             '''
             for f in formats:
                 print(f"Format code: {f['format_id']}, Extension: {f['ext']}, "
@@ -103,7 +104,7 @@ async def all(message: Message, state: FSMContext):
             response = requests.get(thumbnail_url)
             with open(thumbnail_path, 'wb') as file:
                 file.write(response.content)
-            title = info_dict.get('title', 'Без названия')
+            title = info_dict.get('title', 'No name')
             await state.update_data(link=link)
             await state.update_data(title=title)
             await state.update_data(domain=domain)
@@ -119,13 +120,13 @@ async def all(message: Message, state: FSMContext):
         await message.answer(start_msg, reply_markup=remove_kb())
 
 async def start_mail(message: Message, state: FSMContext):
-    await message.answer("Отправьте сообщение для рассылки\n/cancel - отмена")
+    await message.answer("Send message forwarding to other users\n/cancel - use to cansel operation")
     await state.set_state(CatchMessageState.message)
 
 async def confirm_mail(message: Message, state: FSMContext):
     await state.clear()
     if message.text == "/cancel":
-        await message.answer("❌Отменено!")
+        await message.answer("❌Denied!")
         return
     txt = message.html_text
     file_id = None
@@ -147,13 +148,13 @@ async def confirm_mail(message: Message, state: FSMContext):
     await state.update_data(txt=txt)
     await state.update_data(file_id=file_id)
     await state.update_data(m_type=m_type)
-    await message.answer("Отправить рассылку?", reply_markup=confirm_mail_kb())
+    await message.answer("Send message to all users?", reply_markup=confirm_mail_kb())
 
 async def mailer(call: CallbackQuery, state: FSMContext):
     _, res = call.data.split(":")
     if res == "0":
         await call.message.delete()
-        await call.message.answer("Отменено")
+        await call.message.answer("Canseled")
         await state.clear()
         return
     data = await state.get_data()
@@ -198,7 +199,7 @@ async def mailer(call: CallbackQuery, state: FSMContext):
                 success += 1
             except:
                 bad += 1
-    await call.message.answer(f"Успешно: {success}\nНеуспешно: {bad}")
+    await call.message.answer(f"Success: {success}\nBad: {bad}")
 
 async def main():
     db.reset_work()
@@ -215,7 +216,7 @@ async def main():
     dp.callback_query.register(youtube_download, F.data.startswith("youtube_download"))
     dp.message.register(all)
 
-    print("Бот запущен")
+    print("Bot started")
     await dp.start_polling(bot)
 
 if __name__ == "__main__":

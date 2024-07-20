@@ -29,9 +29,7 @@ def crop_to_square(image_path, out_path):
         img.save(out_path)
 
 def sanitize_filename(text):
-    # Заменяем недопустимые символы на пустую строку
     sanitized_text = re.sub(r'[\\/:"*?<>|]+', '', text)
-    # Заменяем пробелы на нижние подчеркивания
     sanitized_text = sanitized_text.replace(' ', '_')
     return sanitized_text
 
@@ -40,22 +38,22 @@ def download_audio(video_url, output_path, user_id, thumb):
     asyncio.set_event_loop(loop)
     try:
         ydl_opts = {
-            'format': 'bestaudio/best',  # Загрузка лучшего доступного аудио
+            'format': 'bestaudio/best', 
             'postprocessors': [
-                {  # Извлечение аудио и конвертация в mp3
+                {
                     'key': 'FFmpegExtractAudio',
                     'preferredcodec': 'mp3',
                     'preferredquality': '320',
                 },
-                {  # Добавление метаданных в аудио файл
+                {
                     'key': 'FFmpegMetadata',
                 },
-                {  # Загрузка превью и использование его в качестве обложки
+                {
                     'key': 'EmbedThumbnail',
                 }
             ],
-            'outtmpl': output_path[:-4],  # Шаблон имени выходного файла
-            'writethumbnail': True,  # Скачать превью видео
+            'outtmpl': output_path[:-4],
+            'writethumbnail': True,
         }
         try:
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -92,7 +90,6 @@ def get_video_formats(url, domain):
         return info_dict
 
 def get_domain(url):
-    # Регулярное выражение для извлечения домена из URL
     domain_pattern = r'^(https?:\/\/)?(www\.)?([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(\/.*)?$'
     match = re.match(domain_pattern, url)
     if match:
@@ -141,7 +138,6 @@ def simple_downloader(url, output_path, user_id, domain, video_format=None, titl
     except:
         try:
             if domain in ["instagram.com", "twitter.com", "x.com"]:
-                # Определите команду для загрузки фотографий
                 output_path = output_path.replace("mp4", "jpg")
                 command = [
                     "gallery-dl",
