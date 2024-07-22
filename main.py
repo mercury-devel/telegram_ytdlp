@@ -18,13 +18,12 @@ import requests
 import random
 
 db = DataBase()
-bot_properties = DefaultBotProperties(parse_mode=ParseMode.HTML)
 with open("start.txt", "rt", encoding="utf-8") as start_file:
     start_msg = start_file.read()
     start_file.close()
 
 async def welcome(message: Message):
-    await message.answer(start_msg, reply_markup=remove_kb())
+    await message.answer(start_msg, reply_markup=remove_kb(), disable_web_page_preview=True)
 
 async def youtube_download(call: CallbackQuery, state: FSMContext):
     data = await state.get_data()
@@ -134,17 +133,17 @@ async def confirm_mail(message: Message, state: FSMContext):
     if message.photo:
         m_type = "photo"
         file_id = message.photo[-1].file_id
-        await message.answer_photo(caption=txt, photo=file_id, parse_mode="html")
+        await message.answer_photo(caption=txt, photo=file_id)
     elif message.video:
         m_type = "video"
         file_id = message.video.file_id
-        await message.answer_video(caption=txt, video=file_id, parse_mode="html")
+        await message.answer_video(caption=txt, video=file_id)
     elif message.animation:
         m_type = "animation"
         file_id = message.animation.file_id
-        await message.answer_animation(caption=txt, animation=file_id, parse_mode="html")
+        await message.answer_animation(caption=txt, animation=file_id)
     if message.text:
-        await message.answer(text=txt, parse_mode="html")
+        await message.answer(text=txt)
     await state.update_data(txt=txt)
     await state.update_data(file_id=file_id)
     await state.update_data(m_type=m_type)
@@ -170,8 +169,7 @@ async def mailer(call: CallbackQuery, state: FSMContext):
                 await call.bot.send_photo(
                     chat_id=user[0],
                     caption=txt,
-                    photo=file_id,
-                    parse_mode="html"
+                    photo=file_id
                 )
                 success += 1
             except:
@@ -182,8 +180,7 @@ async def mailer(call: CallbackQuery, state: FSMContext):
                 await call.bot.send_video(
                     chat_id=user[0],
                     caption=txt,
-                    video=file_id,
-                    parse_mode="html"
+                    video=file_id
                 )
                 success += 1
             except:
@@ -193,8 +190,7 @@ async def mailer(call: CallbackQuery, state: FSMContext):
             try:
                 await call.bot.send_message(
                     chat_id=user[0],
-                    text=txt,
-                    parse_mode="html"
+                    text=txt
                 )
                 success += 1
             except:
@@ -204,7 +200,8 @@ async def mailer(call: CallbackQuery, state: FSMContext):
 async def main():
     db.reset_work()
     clear_downloads()
-    bot = Bot(token=bot_token)
+    bot_properties = DefaultBotProperties(parse_mode=ParseMode.HTML)
+    bot = Bot(token=bot_token, default=bot_properties)
     dp = Dispatcher(storage=MemoryStorage())
     dp.message.middleware(ExistsUserMiddleware())
     dp.message.middleware(ThrottlingMiddleware())
