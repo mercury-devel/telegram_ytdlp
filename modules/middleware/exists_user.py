@@ -21,6 +21,6 @@ class ExistsUserMiddleware(BaseMiddleware):
         else:
             await event.bot.send_message(
                 chat_id=user.id,
-                text="Для работы с ботом подпишитесь на канал",
+                text="To activate bot you need to subscribe the channel",
                 reply_markup=sub_kb()
             )
