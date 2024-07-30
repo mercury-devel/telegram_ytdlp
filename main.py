@@ -52,7 +52,9 @@ async def youtube_download(call: CallbackQuery, state: FSMContext):
         my_thread.start()
     else:
         audio_path = f"downloads/{title}.mp3"
-        my_thread = threading.Thread(target=download_audio, args=(link, audio_path, call.from_user.id, thumbnail_path, ))
+        bot_info = await call.bot.get_me()
+        bot_username = bot_info.username
+        my_thread = threading.Thread(target=download_audio, args=(link, audio_path, call.from_user.id, thumbnail_path, bot_username,))
         my_thread.start()
 
 async def all(message: Message, state: FSMContext):
@@ -74,13 +76,23 @@ async def all(message: Message, state: FSMContext):
             await message.answer("Live streams is restricted!")
             return
         title_orig = info_dict.get('title', 'No name')
-        if domain == "soundcloud.com":
+
+        if domain.find("soundcloud.com") > -1:
+            await message.answer("Downloading has been started")
             title = sanitize_filename(title_orig)
             audio_path = f"downloads/{title}.mp3"
-            my_thread = threading.Thread(target=download_audio, args=(link, audio_path, message.from_user.id,))
+            thumb = info_dict['thumbnails'][-1]['url']
+            thumbnail_path = video_path.replace("mp4", "jpg")
+            response = requests.get(thumb)
+            with open(thumbnail_path, 'wb') as file:
+                file.write(response.content)
+            bot_info = await message.bot.get_me()
+            bot_username = bot_info.username
+
+            my_thread = threading.Thread(target=download_audio, args=(link, audio_path, message.from_user.id, thumbnail_path, bot_username,))
             my_thread.start()
             return
-        if domain.find("youtu") == -1:
+        elif domain.find("youtu") == -1:
             db.set_work(message.from_user.id, 1)
             await message.answer("Downloading has been started")
             my_thread = threading.Thread(target=simple_downloader, args=(link, video_path, message.from_user.id, domain, None, title_orig,))
