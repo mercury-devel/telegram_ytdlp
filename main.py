@@ -81,7 +81,10 @@ async def all(message: Message, state: FSMContext):
             await message.answer("Downloading has been started")
             title = sanitize_filename(title_orig)
             audio_path = f"downloads/{title}.mp3"
-            thumb = info_dict['thumbnails'][-1]['url']
+            try:
+                thumb = info_dict['thumbnails'][7]['url']
+            except:
+                thumb = info_dict['thumbnails'][-1]['url']
             thumbnail_path = video_path.replace("mp4", "jpg")
             response = requests.get(thumb)
             with open(thumbnail_path, 'wb') as file:

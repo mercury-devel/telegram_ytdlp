@@ -63,14 +63,20 @@ def download_audio(video_url, output_path, user_id, thumb, bot_username):
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([video_url])
         audio_thumb = f"{thumb[:-4]}_audio.jpg"
-        crop_to_square(thumb, audio_thumb)
+        try:
+            crop_to_square(thumb, audio_thumb)
+        except:
+            pass
         app = Client(f"sessions/{user_id}", bot_token=config.bot_token, api_id=config.api_id, api_hash=config.api_hash)
         app.start()
-        app.send_audio(chat_id=user_id, audio=output_path, thumb=audio_thumb, title=output_path[:-4].replace("downloads/", ""), caption=f"💎 <b>@{bot_username}</b>", parse_mode=enums.ParseMode.HTML)
+        try:
+            app.send_audio(chat_id=user_id, audio=output_path, thumb=audio_thumb, title=output_path[:-4].replace("downloads/", ""), caption=f"💎 <b>@{bot_username}</b>", parse_mode=enums.ParseMode.HTML)
+        except:
+            app.send_audio(chat_id=user_id, audio=output_path, title=output_path[:-4].replace("downloads/", ""), caption=f"💎 <b>@{bot_username}</b>", parse_mode=enums.ParseMode.HTML)
         app.stop()
         delete_file(audio_thumb)
-    except:
-        pass
+    except Exception as e:
+        print(e)
     db.set_work(user_id, 0)
     delete_file(output_path)
 
