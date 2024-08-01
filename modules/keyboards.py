@@ -1,5 +1,3 @@
-from aiogram.types.reply_keyboard_markup import ReplyKeyboardMarkup
-from aiogram.types.keyboard_button import KeyboardButton
 from aiogram import types
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram.types.reply_keyboard_remove import ReplyKeyboardRemove
@@ -8,7 +6,7 @@ import config
 
 def sub_kb():
     keyboard_builder = InlineKeyboardBuilder()
-    keyboard_builder.button(text="Подписаться", url=config.channel_link)
+    keyboard_builder.button(text="Subscribe to channel", url=config.channel_link)
     keyboard_builder.adjust(1)
     return keyboard_builder.as_markup()
 
