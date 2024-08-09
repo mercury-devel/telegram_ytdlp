@@ -4,10 +4,9 @@
 
 # 📖 Description
 This bot can download:
-- Photos and videos from Instagram and Twitter.
+- Photos and videos from Instagram, Tik Tok.
 - Videos (with quality selection) and audio (in the best quality) from YouTube.
 - Music from SoundCloud.
-- Videos and clips from VKontakte.
 
 # ⚙️ Project Setup Guide
 
@@ -44,7 +43,7 @@ CHANNEL_ID=your_channel_id (ex. -100123123123)
 CHANNEL_LINK=your_channel_link (ex. t.me/***)
 API_ID=your_telegram_app_api_id
 API_HASH=your_telegram_app_api_hash
-ADMIN_LIST=[123, 456](where are 123 and 456 - telegram ids of admins)
+ADMIN_LIST=123, 456(where are 123 and 456 - telegram ids of admins)
 ```
 
 ## Setup Instructions
