@@ -140,6 +140,8 @@ async def all(message: Message, state: FSMContext):
 
 
 async def start_mail(message: Message, state: FSMContext):
+    if str(message.from_user.id) not in config.admin_list:
+        return
     await message.answer("Send message forwarding to other users\n/cancel - use to cansel operation")
     await state.set_state(CatchMessageState.message)
 
