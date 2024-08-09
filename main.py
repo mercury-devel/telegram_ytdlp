@@ -58,80 +58,86 @@ async def youtube_download(call: CallbackQuery, state: FSMContext):
         my_thread.start()
 
 async def all(message: Message, state: FSMContext):
-    link = message.text
-    domain = get_domain(link)
-    if domain:
-        if domain == "vk.com":
-            if link.find("@") > -1:
+    try:
+        link = message.text
+        domain = get_domain(link)
+        if domain:
+            if domain == "vk.com":
+                if link.find("@") > -1:
+                    return
+            _, work = db.get_user(message.from_user.id)
+            if work == 1:
+                await message.answer("Wait while your video is downloading")
                 return
-        _, work = db.get_user(message.from_user.id)
-        if work == 1:
-            await message.answer("Wait while your video is downloading")
-            return
-        random_name = random.randint(10000, 99999)
-        video_path = f"downloads/{random_name}.mp4"
-        info_dict = get_video_formats(link, domain)
-        live = info_dict.get('is_live', False)
-        if live:
-            await message.answer("Live streams is restricted!")
-            return
-        title_orig = info_dict.get('title', 'No name')
-
-        if domain.find("soundcloud.com") > -1:
-            await message.answer("Downloading has been started")
-            title = sanitize_filename(title_orig)
-            audio_path = f"downloads/{title}.mp3"
-            try:
-                thumb = info_dict['thumbnails'][7]['url']
-            except:
-                thumb = info_dict['thumbnails'][-1]['url']
-            thumbnail_path = video_path.replace("mp4", "jpg")
-            response = requests.get(thumb)
-            with open(thumbnail_path, 'wb') as file:
-                file.write(response.content)
-            bot_info = await message.bot.get_me()
-            bot_username = bot_info.username
-
-            my_thread = threading.Thread(target=download_audio, args=(link, audio_path, message.from_user.id, thumbnail_path, bot_username,))
-            my_thread.start()
-            return
-        elif domain.find("youtu") == -1:
-            db.set_work(message.from_user.id, 1)
-            await message.answer("Downloading has been started")
-            my_thread = threading.Thread(target=simple_downloader, args=(link, video_path, message.from_user.id, domain, None, title_orig,))
-            my_thread.start()
-        else:
-            formats = info_dict.get('formats', [])
-            if info_dict['live_status'] == 'is_live':
+            random_name = random.randint(10000, 99999)
+            video_path = f"downloads/{random_name}.mp4"
+            info_dict = get_video_formats(link, domain)
+            live = info_dict.get('is_live', False)
+            if live:
                 await message.answer("Live streams is restricted!")
                 return
-            # Formats logs
-            '''
-            for f in formats:
-                print(f"Format code: {f['format_id']}, Extension: {f['ext']}, "
-                    f"Resolution: {f.get('resolution', 'N/A')}, "
-                    f"Note: {f.get('format_note', 'N/A')}, "
-                    f"Filesize: {f.get('filesize', 'N/A')}")'''
+            title_orig = info_dict.get('title', 'No name')
 
-            thumbnail_url = info_dict.get('thumbnail', None)
-            thumbnail_path = video_path.replace("mp4", "jpg")
-            response = requests.get(thumbnail_url)
-            with open(thumbnail_path, 'wb') as file:
-                file.write(response.content)
-            title = info_dict.get('title', 'No name')
-            await state.update_data(link=link)
-            await state.update_data(title=title)
-            await state.update_data(domain=domain)
-            await state.update_data(video_path=video_path)
-            await state.update_data(thumbnail_path=thumbnail_path)
-            kb = youtube_formats_kb(formats)
-            if not thumbnail_url:
-                await message.answer(title, reply_markup=kb)
+            if domain.find("soundcloud.com") > -1:
+                await message.answer("Downloading has been started")
+                title = sanitize_filename(title_orig)
+                audio_path = f"downloads/{title}.mp3"
+                try:
+                    thumb = info_dict['thumbnails'][7]['url']
+                except:
+                    thumb = info_dict['thumbnails'][-1]['url']
+                thumbnail_path = video_path.replace("mp4", "jpg")
+                response = requests.get(thumb)
+                with open(thumbnail_path, 'wb') as file:
+                    file.write(response.content)
+                bot_info = await message.bot.get_me()
+                bot_username = bot_info.username
+
+                my_thread = threading.Thread(target=download_audio, args=(link, audio_path, message.from_user.id, thumbnail_path, bot_username,))
+                my_thread.start()
+                return
+            elif domain.find("youtu") > -1:
+                formats = info_dict.get('formats', [])
+                if info_dict['live_status'] == 'is_live':
+                    await message.answer("Live streams is restricted!")
+                    return
+                # Formats logs
+                '''
+                for f in formats:
+                    print(f"Format code: {f['format_id']}, Extension: {f['ext']}, "
+                        f"Resolution: {f.get('resolution', 'N/A')}, "
+                        f"Note: {f.get('format_note', 'N/A')}, "
+                        f"Filesize: {f.get('filesize', 'N/A')}")'''
+
+                thumbnail_url = info_dict.get('thumbnail', None)
+                thumbnail_path = video_path.replace("mp4", "jpg")
+                response = requests.get(thumbnail_url)
+                with open(thumbnail_path, 'wb') as file:
+                    file.write(response.content)
+                title = info_dict.get('title', 'No name')
+                await state.update_data(link=link)
+                await state.update_data(title=title)
+                await state.update_data(domain=domain)
+                await state.update_data(video_path=video_path)
+                await state.update_data(thumbnail_path=thumbnail_path)
+                kb = youtube_formats_kb(formats)
+                if not thumbnail_url:
+                    await message.answer(title, reply_markup=kb)
+                else:
+                    await message.answer_photo(thumbnail_url, title, reply_markup=kb)
             else:
-                await message.answer_photo(thumbnail_url, title, reply_markup=kb)
+                if domain.find("tiktok") > -1 or domain.find("instagram") > -1:
+                    db.set_work(message.from_user.id, 1)
+                    await message.answer("Downloading has been started")
+                    my_thread = threading.Thread(target=simple_downloader, args=(link, video_path, message.from_user.id, domain, None, title_orig,))
+                    my_thread.start()
+                else:
+                    await message.answer(start_msg, reply_markup=remove_kb(), disable_web_page_preview=True)
+        else:
+            await message.answer(start_msg, reply_markup=remove_kb(), disable_web_page_preview=True)
+    except:
+        await message.answer(start_msg, reply_markup=remove_kb(), disable_web_page_preview=True)
 
-    else:
-        await message.answer(start_msg, reply_markup=remove_kb())
 
 async def start_mail(message: Message, state: FSMContext):
     await message.answer("Send message forwarding to other users\n/cancel - use to cansel operation")
