@@ -22,6 +22,7 @@ build_image() {
 create_and_run_container() {
     echo "Creating and starting container..."
     docker run -d --name telegram_utdlp --env-file .env telegram_utdlp
+    docker update --restart unless-stopped telegram_utdlp
 }
 
 # Function to stop the container
