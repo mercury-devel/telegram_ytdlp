@@ -70,9 +70,9 @@ def download_audio(video_url, output_path, user_id, thumb, bot_username):
         app = Client(f"sessions/{user_id}", bot_token=config.bot_token, api_id=config.api_id, api_hash=config.api_hash)
         app.start()
         try:
-            app.send_audio(chat_id=user_id, audio=output_path, thumb=audio_thumb, title=output_path[:-4].replace("downloads/", ""), caption=f"💎 <b>@{bot_username}</b>", parse_mode=enums.ParseMode.HTML)
+            app.send_audio(chat_id=user_id, audio=output_path, thumb=audio_thumb, title=output_path[:-4].replace("downloads/", ""), caption=f"💎 <b><a href='https://t.me/{bot_username}'>@{bot_username}</a></b>", parse_mode=enums.ParseMode.HTML)
         except:
-            app.send_audio(chat_id=user_id, audio=output_path, title=output_path[:-4].replace("downloads/", ""), caption=f"💎 <b>@{bot_username}</b>", parse_mode=enums.ParseMode.HTML)
+            app.send_audio(chat_id=user_id, audio=output_path, title=output_path[:-4].replace("downloads/", ""), caption=f"💎 <b><a href='https://t.me/{bot_username}'>@{bot_username}</a></b>", parse_mode=enums.ParseMode.HTML)
         app.stop()
         delete_file(audio_thumb)
     except Exception as e:
