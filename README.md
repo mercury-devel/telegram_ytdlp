@@ -79,19 +79,3 @@ Type /start then paste your link to video on youtube, instagram, tik tok etc
 
 If you are in admin list, type /admin. There is a message sender. It sends your message to all users in your bot!
 
-# 💰 Support My Work
-
-If you like what I do and want to support me, consider making a Bitcoin donation!
-
-**Bitcoin:**
-
-`bc1qhpegcfz6ynmksff95wj9e4kva89d95syyqk3l4`
-
-**USDT/TRC20:**
-
-`TRJxipxAswjj9A7RuvUFx1ShfmZ3JLhi2r`
-
-
-**TON:**
-
-`EQCwp7u30xT9gmWfcruTP45gLlG66fi1ySGthYcasAss05uR`
