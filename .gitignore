@@ -21,7 +21,6 @@ var/
 wheels/
 cookies/
 sessions/
-db.db
 share/python-wheels/
 *.egg-info/
 .installed.cfg
