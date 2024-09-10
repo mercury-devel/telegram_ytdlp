@@ -15,13 +15,12 @@ show_menu() {
 # Function to perform the build command
 build_image() {
     echo "Building image..."
-    docker build -t telegram_utdlp .
+    docker-compose up --build -d
 }
 
 # Function to create and start the container
 create_and_run_container() {
     echo "Creating and starting container..."
-    docker run -d --name telegram_utdlp --env-file .env telegram_utdlp
     docker update --restart unless-stopped telegram_utdlp
 }
 

@@ -1,9 +1,14 @@
-version: '3.8'
+version: '3'
 services:
-  bot:
+  app:
     build: .
-    env_file:
-      - .env
+    container_name: telegram_utdlp
     volumes:
-      - .:/app
-    command: ["python", "bot.py"]
+      - telegram_utdlpdb:/app/base
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:///app/db.db
+
+volumes:
+  telegram_utdlpdb:
