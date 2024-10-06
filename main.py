@@ -126,7 +126,7 @@ async def all(message: Message, state: FSMContext):
                 else:
                     await message.answer_photo(thumbnail_url, title, reply_markup=kb)
             else:
-                if domain.find("tiktok") > -1 or domain.find("instagram") > -1:
+                if domain.find("tiktok") > -1 or domain.find("instagram") > -1 or domain.find("pinterest") > -1 or domain.find("vk.com") > -1:
                     db.set_work(message.from_user.id, 1)
                     await message.answer("Downloading has been started")
                     my_thread = threading.Thread(target=simple_downloader, args=(link, video_path, message.from_user.id, domain, None, title_orig,))
